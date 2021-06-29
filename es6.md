@@ -79,3 +79,103 @@ Array.from(buttons).forEach(button =>{ //forEach 함수가 되지 않음
 - Array.findIndex : 인덱스 반환 
 - Array.fill : start와 end까지 원하는 string으로 채움 
 
+9. Objct Destructuring 
+* destructuring(비구조화) : object나 array 그 외 요소들 안의 변수를 바깥으로 끄집어 내서 사용할 수 있도록 하는거 
+- 큰 오브젝트에서 특정 변수나 그 안에 속한 작은 오브젝트에 접근할 수 있도록 해줌 
+- {} : const 변수를 생성
+예) const settings = {
+    notification:{
+        follow: true, 
+        alerts: true,
+        unfollow: false  
+    },
+    color: {
+        theme: "dark"
+    }
+}
+const {notification} = settings; 
+- object안에 object로 접근할 시, object:{object}로 접근
+- default : object=false 형태로 디폴트 지정(지정을 안하면 undefined)
+            부모 object가 통째로 없다고 하면 {} 
+예) const {notification: {follow = false} = {}} = settings //one-line-statement 
+- 최종적으로 접근하는 값만 js에서 object 바깥으로 꺼내 쓸 수 있음 
+
+10. array destructruring 
+- 데이터를 조작하지 않을 때 유용(데이터를 조작할 때는 object가 낫음)
+- object와는 비슷하나 {}(중괄호) 대신 [](대괄호)로 표현
+예) const days =  ["Mon", "Tue", "Wed", "Thu", "Sat", "Sun"]; 
+const [mon, tue, wed, thu = "Thu"] = days;
+- function 사용 가능 
+예) const days = () => ["Mon", "Tue", "Wed", "Thu", "Sat", "Sun"]; 
+const [mon, tue, wed, thu = "Thu"] = days();
+
+11. Renaming 
+- rest api로 받은 데이터 변수명을 바꿀 때 유용하게 쓸 수 있음
+- :으로 간단하게 renaming할 수 있음 
+- let도 사용가능. let을 사용할 때는 시작과 끝에 ()을 넣음
+예) const settings2 = {
+    color:{
+        chosen_color : "dark"
+    }
+};
+
+let chosenColor = "blue";
+({color:{chosen_color : chosenColor = "light"}} = settings2); 
+
+12. Function Destructuring 
+- 함수에 여러개의 파라미터를 넣으면 코드가 길어지고 지저분해지므로 object destructring을 이용하여 코드가 간편해짐
+- object안에 property가 없을 경우에는 디폴트값을 명시하여 에러 없이 함수 실행 가능 
+예) function saveSettings({follow, alert, color="blue"}){
+    console.log(color); 
+}
+
+saveSettings({
+    follow:true, 
+    alert:true, 
+    mkt:true
+})
+
+13. Value Shorthands(변수명 단축) 
+- property의 키와 값 이름이 동일하면 키:값을 명시하지 않고도 js에서 인식 가능 
+- 키와 값을 다르게 지정해도 됨 
+예) const settings4 ={
+    notifications:{
+        follow, // == follow: follow
+        alert   // == alert: alert
+    }
+}
+
+14. Swapping and Skipping 
+- Swapping : array destructuring을 이용하여 swapping 
+예) [sat, mon] = [mon, sat]; 
+- Skipping : array destructuring을 이용하여 skipping 
+예) const [,,,thu, fri] = days2;
+
+15. Spread 
+- 변수를 가져가서 풀어해친다(unpack)
+- ...을 이용하여 object나 array를 합침 
+- 위치 아무 상관 없음 
+예) const numbers = [1,2,3,4]; 
+const alpabets = ["a", "b", "c"]; 
+//console.log([...numbers, ...alpabets]);
+
+const a = {
+    name : "nico", 
+    age : 24
+}; 
+const hello ={
+    name : "lynn", 
+    hello : "hello"
+}; 
+//console.log({...a, ...hello});
+- 기존데이터를 복사해서 새로운 데이터를 만들 때 사용 
+예) const first = ["mon", "tue", "wed"]; 
+const weekend = ["sat","sun"]; 
+const fullWeek = [...first , "thu", "fri", ...weekend]; 
+- 선택적인 속성값(optional object property)도 지정 가능
+예) const user = {
+    username : "nico", 
+    age : 24,
+    ...(lastName !== "" && {lastName}) //spread로 전개하려면 데이터가 object여야 하므로 중괄호로 감쌈
+    //lastName: lastName !== "" ? lastName : undefined
+}; 

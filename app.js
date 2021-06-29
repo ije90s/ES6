@@ -164,3 +164,136 @@ const target = firends3.findIndex(friend => friend.includes("@korea.com"));
 firends3.fill("*".repeat(5), target);
 
 console.log(firends3);
+
+
+/*==============================
+object destructuring
+===============================*/
+const settings = {
+    //notification:{
+        //follow: true, 
+    //    alerts: true,
+    //   unfollow: false  
+    //},
+    color: {
+        theme: "dark"
+    }
+}
+
+const {notification} = settings;
+// const notification = settings.notification 
+//console.log(notification);
+
+const {notification: {follow = false} = {}} = settings; // notification 접근해서 follow만 가져오는 것뿐이지 notification을 가져오는 것이 X 
+//console.log(follow);
+
+
+/*==============================
+array destructuring
+===============================*/
+//const days =  ["Mon", "Tue", "Wed", "Thu", "Sat", "Sun"]; 
+//const [mon, tue, wed, thu = "Thu"] = days; 아래와 똑같이 값 반환 
+//const days = () => ["Mon", "Tue", "Wed", "Thu", "Sat", "Sun"]; 
+//const [mon, tue, wed, thu = "Thu"] = days();
+//console.log(mon, tue, wed, thu); 
+
+/*==============================
+renaming
+===============================*/
+const settings2 = {
+    color:{
+        chosen_color : "dark"
+    }
+};
+
+let chosenColor = "blue";
+//console.log(chosenColor);
+({color:{chosen_color : chosenColor = "light"}} = settings2); 
+//console.log(chosenColor);
+
+/*==============================
+function destructuring
+===============================*/
+//function saveSettings({follow, alert, color="blue"}){
+function saveSettings({notification, color:{theme}}){
+    //console.log(theme); 
+}
+
+saveSettings({
+//    color:"green"
+    notification: {
+        follow:true, 
+        alert:true, 
+        mkt:true
+    }, 
+    color :{
+        theme: "blue"
+    }
+})
+
+/*==============================
+value shorthands(변수명 단축)
+===============================*/
+//const follow = checkFollow(); 
+//const alert = checkAlert(); 
+
+const settings4 ={
+    notifications:{
+        follow, // == follow: follow
+        alert   // == alert: alert
+    }
+}
+
+/*==============================
+swapping and skipping
+===============================*/
+//let mon = "Sat"; 
+//let sat = "Mon"; 
+
+//[sat, mon] = [mon, sat]; 
+
+//const days2 = ["mon", "tue", "wed", "thu", "fri"];
+//const [,,,thu, fri] = days2;
+//console.log(thu, fri);
+
+/*==============================
+Spread
+===============================*/
+const numbers = [1,2,3,4]; 
+const alpabets = ["a", "b", "c"]; 
+//console.log(numbers); 
+//console.log([...numbers, ...alpabets]);
+
+const a = {
+    name : "nico", 
+    age : 24
+}; 
+const hello ={
+    name : "lynn", 
+    hello : "hello"
+}; 
+//console.log({...a, ...hello});
+
+const friends = ["nico", "lynn"]; 
+const newFriends = ["dal", ...friends]; 
+//console.log(newFriends);
+
+
+const nico = {
+    username : "nico"
+}; 
+//console.log({...nico, password:123});
+
+const first = ["mon", "tue", "wed"]; 
+const weekend = ["sat","sun"]; 
+const fullWeek = [...first , "thu", "fri", ...weekend]; 
+//console.log(fullWeek);
+
+//const lastName = prompt("Last name"); 
+const user = {
+    username : "nico", 
+    age : 24,
+    ...(lastName !== "" && {lastName}) //spread로 전개하려면 데이터가 object여야 하므로 중괄호로 감쌈
+    //lastName: lastName !== "" ? lastName : undefined
+}; 
+//console.log(user);
