@@ -179,3 +179,34 @@ const fullWeek = [...first , "thu", "fri", ...weekend];
     ...(lastName !== "" && {lastName}) //spread로 전개하려면 데이터가 object여야 하므로 중괄호로 감쌈
     //lastName: lastName !== "" ? lastName : undefined
 }; 
+
+16. Rest Prameters 
+- speread와는 다르게 모든 값을 하나의 변수로 축소(cotract)
+- 여러개의 파라미터를 다 적기보다는 rest를 이용해서 파라미터를 다 적지 않고도 포함시킬 수 있음
+- ...rest >> rest는 아무거나 써도 됨  
+예) const killPassword = ({password, ...rest}) => rest; 
+- spread와 쓰는 형식은 차이 없으나 파라미터 위치면 rest 
+- rest는 array를 만듬 
+
+17. For of 
+- 형태 for(const dd of Array) 
+예) for(const friend of friend5){
+   if(friend === "Dal"){
+       break;
+   }else{
+       console.log(friend);
+   }
+}
+- array, Iterables, NodeList, Strings 등의 Iterable한 모든 것들에 동작 [상세](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/for...of)
+- const, let 모두 사용 가능 
+- 루프를 사용하거나 멈춤도 가능 
+
+18. Promise 
+- 비동기 작업이 맞이할 미래의 완료 또는 실패와 그 결과 값을 나타냄. [상세](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- 핵심) 아직 모르는 value와 함께 작업할 수 있게 해줌
+* 비동기성(async) : 순차적으로 처리되는 게 아니라 한꺼번에 실행 >> js는 동시에 많은 일들을 할 수 있으며, 실행을 막지 X 
+  Promise는 async를 토대로 구현 
+* SetTimeOut : 일정 시간이 지난 후에 함수를 실행 <> setInterval : 일정 시간 간격을 두고 함수를 실행 
+
+
+
