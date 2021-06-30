@@ -279,7 +279,7 @@ const newFriends = ["dal", ...friends];
 //console.log(newFriends);
 
 
-const nico = {
+const nico2 = {
     username : "nico"
 }; 
 //console.log({...nico, password:123});
@@ -293,7 +293,70 @@ const fullWeek = [...first , "thu", "fri", ...weekend];
 const user = {
     username : "nico", 
     age : 24,
-    ...(lastName !== "" && {lastName}) //spread로 전개하려면 데이터가 object여야 하므로 중괄호로 감쌈
+    //...(lastName !== "" && {lastName}) //spread로 전개하려면 데이터가 object여야 하므로 중괄호로 감쌈
     //lastName: lastName !== "" ? lastName : undefined
 }; 
 //console.log(user);
+
+
+/*==============================
+Rest Parameters
+===============================*/
+const infiniteArgs = (...kimchi) => console.log(kimchi); 
+
+infiniteArgs("1", 2, true, "lalal", [1,2,3,4]);
+
+const bestFriendMaker = (firstOne, ...potato) => {
+    //console.log(`My best friend is ${firstOne}`);
+    //console.log(potato);
+}; 
+
+bestFriendMaker("nic", "lynn", "dall", "japan guy"); 
+
+const user22 = {
+    NAME : "nico",
+    age: 24, 
+    password: 12345
+}; 
+
+const killPassword = ({password, ...rest}) => rest; 
+
+const cleanUser = killPassword(user22); 
+
+//console.log(cleanUser);
+
+const setCountry = ({country = "KR", ...rest}) =>({country, ...rest}); // destructuring을 사용해서 country값을 가져오고, rest구문을 이용해서 입력 인자의 나머지 값들을 하나로 축소
+                                                                       // country와 함께 나머지 값을 담고 있는 ...rest변수를 전개하여 return 
+//console.log(setCountry(user22));
+
+const rename = ({NAME:name, ...rest}) => ({name, ...rest}); 
+
+//console.log(rename(user22));
+
+/*==============================
+For ...of
+===============================*/
+const friend5 = ["Nico", "Lynn", "Dal", "ha", "hu"]; 
+
+//const addHeart = (c, i, a) => console.log(c, i, a); // c : current item, i :index, a : current array
+//friend5.forEach(addHeart);
+//friend5.forEach(frient => console.log(frient));
+
+for(const friend of friend5){
+   if(friend === "Dal"){
+       break;
+   }else{
+   //    console.log(friend);
+   }
+}
+
+/*==============================
+Promises
+===============================*/
+const amISexy = new Promise((resolve, reject) => {
+    setTimeout(resolve, 3000, "Yes you are"); 
+}); 
+
+console.log(amISexy);
+
+setInterval(console.log, 1000, amISexy); 
