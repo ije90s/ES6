@@ -354,9 +354,93 @@ for(const friend of friend5){
 Promises
 ===============================*/
 const amISexy = new Promise((resolve, reject) => {
-    setTimeout(resolve, 3000, "Yes you are"); 
+    //resolve("Yes you are!"); // == setTimeout(resolve, 3000, "Yes you are"); 
+    //setTimeout(reject, 3000, "You are ugly!"); 
+    //resolve(2);
+    reject(3);
 }); 
 
-console.log(amISexy);
+//console.log(amISexy);
+//setInterval(console.log, 1000, amISexy); 
+//const thenFn = value => console.log(value); 
+//amISexy.then(thenFn); // == amISexy.then(result => console.log(result))
 
-setInterval(console.log, 1000, amISexy); 
+//amISexy
+//.then(result => console.log(result))
+//.catch(error => console.log(error)); 
+
+// chaining promise
+/*const timesTow = (number) => number * 2; 
+amISexy
+.then(timesTow)
+.then(timesTow)
+.then(timesTow)
+.then(timesTow)
+.then(() => {
+    throw Error("something is wrong");
+})
+.then(lastNumber => console.log(lastNumber))
+.catch(error => console.log(error));*/
+
+/*const p1 = new Promise((resolve, reject) =>{
+    setTimeout(reject, 10000, "First");
+})
+.then(value => console.log(value))
+.catch(error => console.log(`${error}`))
+.finally(() => console.log("Im done"));*/
+
+
+/*const p2 = new Promise((resolve, reject) =>{
+    //setTimeout(resolve, 1000, "Second");
+    setTimeout(reject, 5000, "I hate JS");
+}); 
+
+const p3 = new Promise((resolve) =>{
+    setTimeout(resolve, 3000, "Third");
+});*/ 
+
+//const motherPromise = Promise.race([p1,p2,p3]); //내가 정한 순서대로 기다렸다가 하나의 값을 제공. promise들이 얼마나 걸리든지 상관없이 
+//motherPromise.then(values => console.log(values)).catch(error => console.log(error)); //array로 결과 반환
+
+/*fetch("https://yts.mx/api/v2/list_movies.json")
+.then(response => {
+    console.log(response); 
+    return response.json(); 
+}) // 다른 promise를 리턴(response.text()), response.json()도 가능
+.then(json => console.log(json)) // 그 promise를 받아서 console.log
+.catch(e => console.log(`＊ ${e}`));*/
+
+/*const getMoviesAsync = async() =>{  //async를 지우면 에러가 발생 >> await은 항상 async 안에서만 유효
+    try{
+        const response = await fetch("https://yts.mx/api/v2/list_movies.json"); //Promise 변수 선언
+        const json = await response.json();
+        //throw Error("Im hungry");
+        console.log(json);
+    }catch(e){
+        console.log(e);
+    }finally{
+        console.log("We are done");
+    }
+} // == async function getMovie(){}
+
+getMoviesAsync(); */
+
+const getMoviesAsync = async() =>{  
+    try{
+        const [moviesResponse, suggestionsResponse] = await Promise.all([
+            fetch("https://yts.mx/api/v2/list_movies.json"), 
+            fetch("https://yts.mx/api/v2/movie_suggestions.json?movie_id=100")
+        ]); //api로 받은 데이터들을 destructuring 
+        
+        const [movies, suggestions] = await Promise.all([
+            moviesResponse.json(), 
+            suggestionsResponse.json()
+        ]);
+        console.log(movies, suggestions);
+    }catch(e){
+        console.log(e);
+    }finally{
+        console.log("We are done");
+    }
+} 
+//getMoviesAsync();
