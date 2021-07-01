@@ -203,10 +203,109 @@ const fullWeek = [...first , "thu", "fri", ...weekend];
 
 18. Promise 
 - 비동기 작업이 맞이할 미래의 완료 또는 실패와 그 결과 값을 나타냄. [상세](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- 상태 : 대기(pending), 성공(fullfilled), 실패(rejected)
 - 핵심) 아직 모르는 value와 함께 작업할 수 있게 해줌
 * 비동기성(async) : 순차적으로 처리되는 게 아니라 한꺼번에 실행 >> js는 동시에 많은 일들을 할 수 있으며, 실행을 막지 X 
   Promise는 async를 토대로 구현 
 * SetTimeOut : 일정 시간이 지난 후에 함수를 실행 <> setInterval : 일정 시간 간격을 두고 함수를 실행 
+- then : promise의 결과값 반환(=언제 끝나는 건 중요하지 않고 promise가 끝났을 때 값을 돌려달라고 명령어를 내림)
+         function도 넣어줄 수 있음 
+         예) const thenFn = value => console.log(value); 
+             amISexy.then(thenFn); // == amISexy.then(result => console.log(result))
+- catch : then과 비슷하나 promise나 function에서 에러가 발생할 경우, 그 에러를 잡아 에러를 보여줌 <> uncaught : 아무도 잡지 못한 에러 >> catch로 잡아야됨 
+        예) amISexy
+            .then(result => console.log(result))
+            .catch(error => console.log(error));
+* then, catch는 각기 다른 상황에서 발생. then이 실행되면 catch는 절대 실행X(반대 경우도 동일)
+- chaining promise : 여러개의 promise를 사용해서 결과값들을 가져올 때 연결
+                     연결된 then은 서로의 순서가 끝나기만을 기다리고 그 결과값을 이용하여 다음 비동기 작업을 실행 
+                     then은 몇개든 상관없이 연결이 가능하고 return값만 정해주면 됨  
+                     예) const timesTow = (number) => number * 2; 
+                        amISexy
+                        .then(timesTow)
+                        .then(timesTow)
+                        .then(timesTow)
+                        .then(timesTow)
+                        .then(() => {
+                            throw Error("something is wrong");
+                        }) // 중간에 에러가 발생할 경우, catch로 잡아냄 
+                        .then(lastNumber => console.log(lastNumber))
+                        .catch(error => console.log(error));
+- Promise.all : 주어진 모든 promise를 실행한 후 진행되는 하나의 promise를 반환 
+                모든 값을 얻을 때까지 기다렸다가 제공. 만약에 한개의 promise가 reject가 되면 Promise.all은 reject로 반환 
+                n개의 promise를 지정했을 때, 프로세스가 제대로 돌아가는지를 확인하는데 유용 
+                예) const p2 = new Promise((resolve, reject) =>{
+                        setTimeout(resolve, 1000, "Second");
+                    }); 
 
+                    const p3 = new Promise((resolve) =>{
+                        setTimeout(resolve, 3000, "Third");
+                    }); 
 
+                    const motherPromise = Promise.all([p2,p3]); //내가 정한 순서대로 기다렸다가 하나의 값을 제공. promise들이 얼마나 걸리든지 상관없이 
+                    motherPromise.then(values => console.log(values)).catch(error => console.log(error)); //array로 결과 반환
+- Promise.race : n개의 promise 중에 하나라도 resolve나 reject가 되면, 빠른 결과를 보여줌. 
+                 어느 것이 먼저 되는지 상관 없을 때 race를 사용
+                 all과 사용법은 동일  
+                 예) const motherPromise = Promise.race([p2,p3]); 
+- finally : 성공하든 실패하든 상관없이 나옴
+            예) const p1 = new Promise((resolve, reject) =>{
+                    setTimeout(reject, 10000, "First");
+                })
+                .then(value => console.log(value))
+                .catch(error => console.log(`${error}`))
+                .finally(() => console.log("Im done"));
+- 다른 사이트의 api를 이용하여 데이터를 가져올 때, promise를 사용 
+예) fetch("https://yts.mx/api/v2/list_movies.json")
+.then(response => {
+    console.log(response); 
+    return response.json(); 
+}) // 다른 promise를 리턴(response.text()), response.json()도 가능
+.then(json => console.log(json)) // 그 promise를 받아서 console.log
+.catch(e => console.log(`＊ ${e}`));
+* fetch : 데이터를 가져올 때, 사용되며 Promise를 return 
+
+19. aysnc / await
+- promise의 업데이트 버전 
+- await : 항상 aysnc 함수 내에서만 사용 가능 >> async를 지우면 에러 발생
+          기본적으로 Promise가 끝날때까지(resolve, reject 상관없이) 기다렸다가 반환된 promise를 받음 
+          arrow function == async function 함수명(){} 
+          예) const getMoviesAsync = async() =>{  
+                const response = await fetch("https://yts.mx/api/v2/list_movies.json");
+                console.log(response);   
+            }
+- try ~ catch ~ finally : 기존 다른 언어에 있던 방식과 비슷
+                          catch 블락은 try블락에 발생하는 await든 밖에 에러든 상관없이 발생하면 잡아냄
+예) const getMoviesAsync = async() =>{ 
+    try{
+        const response = await fetch("https://yts.mx/api/v2/list_movies.json"); 
+        const json = await response.json();
+        //throw Error("Im hungry");
+        console.log(json);
+    }catch(e){
+        console.log(e);
+    }finally{
+        console.log("We are done");
+    }
+}
+- parallel asnync await도 가능 
+예) const getMoviesAsync = async() =>{  
+    try{
+        const [moviesResponse, suggestionsResponse] = await Promise.all([
+            fetch("https://yts.mx/api/v2/list_movies.json"), 
+            fetch("https://yts.mx/api/v2/movie_suggestions.json?movie_id=100")
+        ]); //api로 받은 데이터들을 destructuring 
+
+        const [movies, suggestions] = await Promise.all([
+            moviesResponse.json(), 
+            suggestionsResponse.json()
+        ]);
+        console.log(movies, suggestions);
+    }catch(e){
+        console.log(e);
+    }finally{
+        console.log("We are done");
+    }
+} 
+* aysnc /await 말고도 axios(액시오스) 방법도 있음 
 
